@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AERO-0 // Absolute Isolation</title>
+    <!-- Tailwind CSS for rapid structured layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- GSAP Core and ScrollTrigger for premium animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600&family=Space+Grotesk:wght@400;700&display=swap');
+
+        :root {
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+            --color-bg: #0d0e10;
+            --color-accent: #3a3f47;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: #f3f4f6;
+            font-family: var(--font-body);
+            overflow-x: hidden;
+        }
+
+        .font-display {
+            font-family: var(--font-display);
+        }
+
+        /* Smooth Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d0e10;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #22252a;
+            border-radius: 3px;
+        }
+
+        /* Subtle glowing background atmosphere */
+        .ambient-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 70%);
+            pointer-events: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen">
+
+    <div class="ambient-glow"></div>
+
+    <!-- Navigation Header -->
+    <header class="fixed top-0 left-0 w-full z-50 px-8 py-6 flex justify-between items-center mix-blend-difference">
+        <a href="#" class="font-display text-xl font-bold tracking-widest text-white">AERO—0</a>
+        <nav class="hidden md:flex space-x-12 text-sm tracking-wider uppercase text-gray-400">
+            <a href="#manifesto" class="hover:text-white transition-colors">Manifesto</a>
+            <a href="#spec" class="hover:text-white transition-colors">Architecture</a>
+        </nav>
+        <div class="text-xs uppercase tracking-widest text-gray-500">[ VAULTED STATE ]</div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <main class="relative w-full min-h-screen flex flex-col justify-center items-center px-4 z-10 select-none">
+        
+        <!-- Large Background Typography -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.02] overflow-hidden">
+            <h1 class="font-display font-bold text-[30vw] tracking-tighter text-white leading-none">SILENT</h1>
+        </div>
+
+        <!-- Animated Hero Headline Container -->
+        <div class="text-center max-w-4xl z-20">
+            <h2 id="hero-headline" class="font-display text-5xl md:text-8xl font-bold tracking-tight mb-6 leading-none">
+                BRUTALLY QUIET.
+            </h2>
+            <p id="hero-subheadline" class="text-gray-400 text-lg md:text-xl max-w-xl mx-auto font-light tracking-wide opacity-0">
+                A concrete vault for your keystrokes. Engineered specifically for high-end software architects who deploy in absolute isolation.
+            </p>
+        </div>
+
+        <!-- Interactive Kinetic Core Canvas Object (Placeholder for 3D render) -->
+        <div id="interactive-hero-wrapper" class="w-72 h-72 md:w-96 md:h-96 my-8 flex items-center justify-center relative cursor-grab active:cursor-grabbing">
+            <!-- Simulated floating core geometry via clean CSS -->
+            <div id="hero-object" class="w-48 h-24 bg-gradient-to-br from-[#1a1c20] to-[#111215] border border-white/10 rounded-xl shadow-2xl flex flex-col justify-between p-4 transform -rotate-12 transition-shadow duration-300 hover:shadow-white/[0.02]">
+                <div class="flex justify-between items-start">
+                    <span class="text-[9px] font-mono tracking-widest text-gray-600">AERO-0 // MK1</span>
+                    <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                </div>
+                <div class="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                    <div class="h-full w-1/3 bg-white/20"></div>
+                </div>
+                <div class="flex justify-between items-end">
+                    <span class="text-[10px] font-mono text-gray-400">00:00:00_</span>
+                    <span class="text-[9px] font-mono text-gray-500">ISO_87A</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Magnetic CTA Button -->
+        <div class="z-20 mt-4">
+            <button id="magnetic-button" class="px-8 py-4 bg-white text-black font-display font-bold tracking-wider text-sm uppercase rounded-full shadow-lg hover:bg-gray-200 transition-colors duration-300">
+                SECURE ENTRY
+            </button>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-40">
+            <span class="text-[10px] font-mono tracking-widest uppercase mb-2">SCROLL TO UNLOCK</span>
+            <div class="w-[1px] h-12 bg-gradient-to-b from-white to-transparent"></div>
+        </div>
+    </main>
+
+    <!-- SECTION 2: THE MANIFESTO -->
+    <section id="manifesto" class="relative w-full min-h-screen flex items-center px-8 md:px-24 py-32 z-10 border-t border-white/5">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-12 w-full max-w-7xl mx-auto">
+            <div class="md:col-span-4 flex flex-col justify-between">
+                <span class="text-xs font-mono text-gray-500 tracking-widest uppercase">// BRIEF_LOGIC_01</span>
+                <h3 class="font-display text-3xl font-bold tracking-tight text-white mt-4 md:mt-0">THE ELIMINATION OF FRICTION.</h3>
+            </div>
+            <div class="md:col-span-8 text-gray-400 space-y-8 text-lg md:text-2xl font-light leading-relaxed">
+                <p class="reveal-text">Most workspaces are loud, reactive, and fragmented. AERO-0 forces your focus backward into an undisturbed creative stream.</p>
+                <p class="reveal-text">Every mechanical structural element is encased within dense, acoustic dampening polymers, making your workspace sound like an empty concrete sanctuary.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CORE ANIMATION ENGINE SCRIPT -->
+    <script>
+        // Ensure standard configuration
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 1. Hero Entrance Sequences
+        window.addEventListener('DOMContentLoaded', () => {
+            const tl = gsap.timeline();
+
+            // Animate layout entrance
+            tl.from("#hero-headline", {
+                y: 60,
+                opacity: 0,
+                duration: 1.4,
+                ease: "power4.out"
+            })
+            .to("#hero-subheadline", {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: "power3.out"
+            }, "-=0.8")
+            .from("#hero-object", {
+                scale: 0.8,
+                rotationX: 45,
+                rotationY: -45,
+                opacity: 0,
+                duration: 1.6,
+                ease: "elastic.out(1, 0.75)"
+            }, "-=1");
+        });
+
+        // 2. Cursor Reactive Hero Object Movement
+        const heroWrapper = document.getElementById('interactive-hero-wrapper');
+        const heroObject = document.getElementById('hero-object');
+
+        if(heroWrapper && heroObject) {
+            heroWrapper.addEventListener('mousemove', (e) => {
+                const rect = heroWrapper.getBoundingClientRect();
+                const x = e.clientX - rect.left - (rect.width / 2);
+                const y = e.clientY - rect.top - (rect.height / 2);
+                
+                gsap.to(heroObject, {
+                    x: x * 0.3,
+                    y: y * 0.3,
+                    rotationY: x * 0.15,
+                    rotationX: -y * 0.15,
+                    duration: 0.6,
+                    ease: "power2.out"
+                });
+            });
+
+            heroWrapper.addEventListener('mouseleave', () => {
+                gsap.to(heroObject, {
+                    x: 0,
+                    y: 0,
+                    rotationY: -12, // Maintain initial style angle
+                    rotationX: 0,
+                    duration: 1,
+                    ease: "elastic.out(1, 0.5)"
+                });
+            });
+        }
+
+        // 3. Magnetic CTA Logic
+        const magnetBtn = document.getElementById('magnetic-button');
+        if (magnetBtn) {
+            document.addEventListener('mousemove', (e) => {
+                const bound = magnetBtn.getBoundingClientRect();
+                const btnX = bound.left + (bound.width / 2);
+                const btnY = bound.top + (bound.height / 2);
+                
+                // Calculate distance from cursor to button center
+                const distanceX = e.clientX - btnX;
+                const distanceY = e.clientY - btnY;
+                const distance = Math.hypot(distanceX, distanceY);
+
+                if (distance < 80) { // Active radius trigger zone
+                    gsap.to(magnetBtn, {
+                        x: distanceX * 0.35,
+                        y: distanceY * 0.35,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                } else {
+                    gsap.to(magnetBtn, {
+                        x: 0,
+                        y: 0,
+                        duration: 0.6,
+                        ease: "power3.out"
+                    });
+                }
+            });
+        }
+
+        // 4. Scroll-Triggered Reveal Animations for Content Sections
+        gsap.utils.toArray('.reveal-text').forEach((element) => {
+            gsap.from(element, {
+                scrollTrigger: {
+                    trigger: element,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                },
+                y: 30,
+                opacity: 0,
+                duration: 1,
+                ease: "power3.out"
+            });
+        });
+    </script>
+</body>
+</html>
