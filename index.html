@@ -3,420 +3,483 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cosmos Odyssey | Premium Experience</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>NEXUS // QUANTUM UNIVERSE</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --primary: #6d28d9;
-            --secondary: #06b6d4;
-            --accent: #f43f5e;
-            --bg: #030014;
-            --text: #f8fafc;
+            --glow-cyan: #00f3ff;
+            --glow-magenta: #ff0055;
+            --bg-deep: #020208;
+            --text-main: #f0f2f5;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            cursor: none; /* Custom premium cursor active */
         }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
+            background-color: var(--bg-deep);
+            color: var(--text-main);
             font-family: 'Space Grotesk', sans-serif;
             overflow-x: hidden;
-            scroll-behavior: smooth;
+            scrollbar-width: none; /* Hide standard scrollbar */
+        }
+        body::-webkit-scrollbar { display: none; }
+
+        /* Custom Cosmic Cursor */
+        #custom-cursor {
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+        }
+        #custom-cursor-follower {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--glow-cyan);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.2s cubic-bezier(0.1, 0.8, 0.3, 1);
+            mix-blend-mode: difference;
         }
 
-        /* Fixed Background Canvas */
-        #universe-canvas {
+        /* Fixed Three.js WebGL Container */
+        #webgl-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: -1;
+            z-index: 1;
             pointer-events: none;
         }
 
-        /* Glowing Nebula Background Elements */
-        .nebula {
+        /* Global HUD Overlay Overlay */
+        .hud-grid {
             position: fixed;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.15;
-            z-index: -1;
+            inset: 0;
+            z-index: 2;
             pointer-events: none;
-            transition: all 0.8s ease;
-        }
-        #nebula-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--primary); }
-        #nebula-2 { bottom: 10%; right: -10%; width: 60vw; height: 60vw; background: var(--secondary); }
-        #nebula-3 { top: 40%; left: 50%; width: 40vw; height: 40vw; background: var(--accent); }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(3, 0, 20, 0.5);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(var(--primary), var(--secondary));
-            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            background: 
+                linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px) 0 0 / 50px 50px,
+                linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px) 0 0 / 50px 50px;
         }
 
-        /* Header / Navbar */
+        .hud-line {
+            position: fixed;
+            background: linear-gradient(90deg, transparent, var(--glow-cyan), transparent);
+            height: 1px;
+            width: 100%;
+            top: 10%;
+            opacity: 0.2;
+        }
+
+        /* Top High-Tech Navbar */
         header {
             position: fixed;
             top: 0;
-            left: 0;
             width: 100%;
-            padding: 2rem 5%;
+            padding: 30px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 100;
-            background: linear-gradient(to bottom, rgba(3,0,20,0.8), transparent);
-            backdrop-filter: blur(5px);
+            z-index: 10;
         }
 
-        .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            font-size: 1.5rem;
-            letter-spacing: 4px;
-            background: linear-gradient(45deg, #fff, var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .sys-status {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 5px;
+            color: var(--glow-cyan);
+            text-shadow: 0 0 10px var(--glow-cyan);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        nav a {
-            color: var(--text);
-            text-decoration: none;
-            margin-left: 2rem;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: color 0.3s;
-            opacity: 0.8;
+        .sys-status::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--glow-cyan);
+            border-radius: 50%;
+            animation: pulse 1s infinite alternate;
         }
 
-        nav a:hover {
-            color: var(--secondary);
-            opacity: 1;
-        }
-
-        /* Layout Sections */
+        /* Layout Structure */
         section {
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 5% 10%;
             position: relative;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
             box-sizing: border-box;
         }
 
-        /* Hero Section */
-        #hero {
-            text-align: center;
+        /* Screen 1: Kinetic Core */
+        #screen-alpha {
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
         }
 
-        .hero-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(3rem, 8vw, 7rem);
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
+        .cypher-text {
+            font-family: 'Syncopate', sans-serif;
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 700;
+            line-height: 0.9;
             text-transform: uppercase;
             letter-spacing: -2px;
-            background: linear-gradient(to bottom, #ffffff 40%, #a5b4fc);
+            position: relative;
+        }
+
+        .glow-title {
+            background: linear-gradient(135deg, #fff 30%, rgba(255,255,255,0.3));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .hero-subtitle {
-            font-size: clamp(1rem, 2vw, 1.5rem);
-            color: #94a3b8;
+        .accent-title {
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.6);
+            transition: all 0.5s ease;
+        }
+
+        .accent-title:hover {
+            -webkit-text-stroke: 1px var(--glow-cyan);
+            text-shadow: 0 0 30px var(--glow-cyan);
+        }
+
+        .sub-bar {
+            margin-top: 2rem;
+            font-size: 1.1rem;
+            max-width: 500px;
+            color: #8a8d98;
+            border-left: 2px solid var(--glow-magenta);
+            padding-left: 20px;
+        }
+
+        /* Screen 2: Interactive Modules */
+        #screen-beta {
+            justify-content: flex-end;
+        }
+
+        .glass-panel {
+            background: rgba(4, 4, 16, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            padding: 60px;
+            border-radius: 2px;
             max-width: 600px;
-            margin-bottom: 3rem;
-            font-weight: 300;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            transform: translateX(100px);
+            opacity: 0;
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .scroll-indicator {
-            position: absolute;
-            bottom: 2rem;
-            font-size: 0.8rem;
+        .glass-panel.visible {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .panel-tag {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 0.7rem;
+            color: var(--glow-magenta);
             letter-spacing: 4px;
-            text-transform: uppercase;
-            opacity: 0.5;
-            animation: bounce 2s infinite;
+            margin-bottom: 15px;
         }
 
-        /* Content Cards & Premium Layouts */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-            width: 100%;
-            max-width: 1200px;
+        .glass-panel h2 {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            letter-spacing: -1px;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            padding: 3rem;
-            backdrop-filter: blur(16px);
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s;
-            cursor: pointer;
+        .glass-panel p {
+            color: #a0a5b5;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        /* Screen 3: Terminal Node */
+        #screen-gamma {
+            justify-content: center;
+            text-align: center;
+        }
+
+        .matrix-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 25px 60px;
+            font-family: 'Syncopate', sans-serif;
+            color: #fff;
+            letter-spacing: 6px;
+            font-size: 0.85rem;
             position: relative;
-            overflow: hidden;
+            transition: all 0.4s ease;
         }
 
-        .card::before {
+        .matrix-btn::before, .matrix-btn::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(6, 182, 212, 0.1), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s;
+            width: 10px;
+            height: 10px;
+            border: 1px solid var(--glow-cyan);
+            transition: all 0.4s ease;
         }
 
-        .card:hover::before {
-            transform: translateX(100%);
+        .matrix-btn::before { top: -5px; left: -5px; border-right: none; border-bottom: none; }
+        .matrix-btn::after { bottom: -5px; right: -5px; border-left: none; border-top: none; }
+
+        .matrix-btn:hover {
+            background: #fff;
+            color: #000;
+            box-shadow: 0 0 50px rgba(255,255,255,0.6);
+            border-color: #fff;
         }
 
-        .card:hover {
-            transform: translateY(-10px) scale(1.02);
-            border-color: var(--secondary);
-            box-shadow: 0 20px 40px rgba(6, 182, 212, 0.1);
+        .matrix-btn:hover::before, .matrix-btn:hover::after {
+            width: calc(100% + 9px);
+            height: calc(100% + 9px);
         }
 
-        .card h3 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            color: #fff;
-        }
+        /* Utility Mechanics */
+        @keyframes pulse { 0% { opacity: 0.3; } 100% { opacity: 1; } }
 
-        .card p {
-            color: #94a3b8;
-            line-height: 1.6;
-        }
-
-        /* Scroll Animation Triggers via Intersection Observer */
-        .reveal {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 1.2s cubic-bezier(0.215, 0.610, 0.355, 1);
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Interactive Cosmic Button */
-        .btn {
-            position: relative;
-            padding: 1rem 2.5rem;
-            background: transparent;
-            border: 2px solid #fff;
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
-            font-weight: bold;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            cursor: pointer;
-            overflow: hidden;
-            transition: 0.5s;
-            border-radius: 50px;
-        }
-
-        .btn:hover {
-            border-color: var(--secondary);
-            box-shadow: 0 0 20px var(--secondary);
-            text-shadow: 0 0 5px #fff;
-        }
-
-        /* Animations */
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            header { padding: 1.5rem 5%; }
-            nav { display: none; } /* Kept clean for mobile */
-            .card { padding: 2rem; }
+        @media(max-width: 768px) {
+            section { padding: 0 5%; }
+            .glass-panel { padding: 30px; }
+            #custom-cursor, #custom-cursor-follower { display: none; } /* Disable custom cursor on mobile */
+            * { cursor: auto; }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="universe-canvas"></canvas>
+    <!-- Cyberpunk Pointer Nodes -->
+    <div id="custom-cursor"></div>
+    <div id="custom-cursor-follower"></div>
+
+    <!-- WebGL Engine Canvas Mounting Node -->
+    <div id="webgl-container"></div>
     
-    <div class="nebula" id="nebula-1"></div>
-    <div class="nebula" id="nebula-2"></div>
-    <div class="nebula" id="nebula-3"></div>
+    <!-- Holographic System Matrix Framework -->
+    <div class="hud-grid"></div>
+    <div class="hud-line"></div>
 
     <header>
-        <div class="logo">GALAXIA</div>
-        <nav>
-            <a href="#hero">Origin</a>
-            <a href="#discover">Explore</a>
-            <a href="#void">The Void</a>
-        </nav>
+        <div class="sys-status">GRID_ACTIVE // CORE_V704</div>
+        <div style="font-size: 0.8rem; letter-spacing: 2px;">INDEX_01</div>
     </header>
 
-    <section id="hero">
-        <h1 class="hero-title">A Journey<br>Through Space</h1>
-        <p class="hero-subtitle">Scroll down to accelerate through the fabric of the universe. Experience seamless cosmic depth control.</p>
-        <button class="btn" onclick="document.getElementById('discover').scrollIntoView();">Launch Engine</button>
-        <div class="scroll-indicator">Scroll to Warp</div>
+    <!-- SECTION 1 -->
+    <section id="screen-alpha">
+        <h1 class="cypher-text glow-title">Quantum</h1>
+        <h1 class="cypher-text accent-title">Universe</h1>
+        <p class="sub-bar">A highly advanced WebGL engine processing real-time warp speed mathematical matrices upon vector displacement scroll tracking.</p>
     </section>
 
-    <section id="discover">
-        <div class="grid">
-            <div class="card reveal">
-                <h3>01. Star Clusters</h3>
-                <p>Dense groupings of stars bound together by mutual gravitational attraction. Witness celestial nodes light up as you cruise deep into sub-space parameters.</p>
-            </div>
-            <div class="card reveal">
-                <h3>02. Dark Matter</h3>
-                <p>An undetectable form of matter that makes up most of the universe's mass. Watch it subtly warp background structural arrays while navigating the stack.</p>
-            </div>
-            <div class="card reveal">
-                <h3>03. Quantum Realities</h3>
-                <p>Overlapping universes operating across infinite dimensional boundaries. Tap coordinates to transition baseline particle fields smoothly.</p>
-            </div>
+    <!-- SECTION 2 -->
+    <section id="screen-beta">
+        <div class="glass-panel" id="trigger-panel">
+            <div class="panel-tag">DIMENSIONAL METRICS</div>
+            <h2>Curvature Control</h2>
+            <p>Every scroll dynamic triggers immediate geometric distortion loops inside the particle field array. Moving your viewport transitions physics constraints through structural fields containing 120,000 algorithmic matrix points.</p>
         </div>
     </section>
 
-    <section id="void" style="text-align: center;">
-        <div class="reveal" style="max-width: 800px;">
-            <h2 class="hero-title" style="font-size: clamp(2rem, 5vw, 4rem); margin-bottom: 2rem;">Event Horizon</h2>
-            <p class="hero-subtitle" style="margin: 0 auto 3rem auto;">You have reached the edge of observable parameters. The simulation wraps infinitely. Return back up to reverse spatial velocity vectors.</p>
-            <button class="btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">Return to Orbit</button>
+    <!-- SECTION 3 -->
+    <section id="screen-gamma">
+        <div style="position: relative; z-index: 5;">
+            <button class="matrix-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">REBOOT INITIALIZATION</button>
         </div>
     </section>
 
+    <!-- Three.js Powerful WebGL Integration Library via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
     <script>
-        // --- 3D CANVAS STARFIELD ENGINE ---
-        const canvas = document.getElementById('universe-canvas');
-        const ctx = canvas.getContext('2d');
+        // --- CUSTOM POINTER TRACKING INTERACTION ---
+        const cursor = document.getElementById('custom-cursor');
+        const follower = document.getElementById('custom-cursor-follower');
+        let mouseX = 0, mouseY = 0;
+        let targetX = 0, targetY = 0;
 
-        let width = canvas.width = window.innerWidth;
-        let height = canvas.height = window.innerHeight;
-
-        const numStars = 600;
-        const stars = [];
-        let baseSpeed = 0.5;
-        let currentSpeed = baseSpeed;
-        let targetSpeed = baseSpeed;
-        let lastScrollY = window.scrollY;
-
-        // Initialize Star Object Schema
-        for (let i = 0; i < numStars; i++) {
-            stars.push({
-                x: Math.random() * width - width / 2,
-                y: Math.random() * height - height / 2,
-                z: Math.random() * width,
-                color: `hsl(${Math.random() * 40 + 190}, 80%, ${Math.random() * 30 + 70}%)` // Real celestial blues/purples
-            });
-        }
-
-        // Window resize event handler
-        window.addEventListener('resize', () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            cursor.style.left = mouseX + 'px';
+            cursor.style.top = mouseY + 'px';
         });
 
-        // Dynamic Space Render Loop
-        function animateSpace() {
-            // Semi-transparent clearing for spectacular star trails during warp speed
-            ctx.fillStyle = `rgba(3, 0, 20, ${currentSpeed > 5 ? 0.18 : 0.4})`;
-            ctx.fillRect(0, 0, width, height);
+        function renderCursorFollower() {
+            targetX += (mouseX - targetX) * 0.15;
+            targetY += (mouseY - targetY) * 0.15;
+            
+            // Offset coordinates for centring elements cleanly
+            follower.style.left = (targetX - 16) + 'px';
+            follower.style.top = (targetY - 16) + 'px';
+            
+            requestAnimationFrame(renderCursorFollower);
+        }
+        renderCursorFollower();
 
-            // Interpolate dynamic speed smoothly (Warp physics deceleration loop)
-            currentSpeed += (targetSpeed - currentSpeed) * 0.08;
-            if (targetSpeed > baseSpeed) targetSpeed -= 0.2; // Return safely to normal speed profile
+        // --- ADVANCED THREE.JS WEBGL PARTICLE SYSTEM ---
+        const container = document.getElementById('webgl-container');
+        
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x020208, 0.0015);
 
-            const cx = width / 2;
-            const cy = height / 2;
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+        camera.position.z = 300;
 
-            for (let i = 0; i < numStars; i++) {
-                let star = stars[i];
-                
-                // Advance star depth position
-                star.z -= currentSpeed;
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        container.appendChild(renderer.domElement);
 
-                // Recycle star to back of space when it flies past screen
-                if (star.z <= 0) {
-                    star.z = width;
-                    star.x = Math.random() * width - cx;
-                    star.y = Math.random() * height - cy;
-                }
+        // Define Particle Array Geometry Structure
+        const particleCount = 45000;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        const colors = new Float32Array(particleCount * 3);
 
-                // 3D Perspective Projection calculations
-                const px = (star.x / star.z) * width + cx;
-                const py = (star.y / star.z) * height + cy;
-                const size = ((width - star.z) / width) * 3;
+        const color1 = new THREE.Color(0x00f3ff); // Cyan
+        const color2 = new THREE.Color(0xff0055); // Magenta
 
-                // Ensure stars display exclusively when safely inside active frame dimensions
-                if (px >= 0 && px <= width && py >= 0 && py <= height) {
-                    ctx.beginPath();
-                    ctx.arc(px, py, size, 0, Math.PI * 2);
-                    ctx.fillStyle = star.color;
-                    ctx.shadowBlur = currentSpeed > 10 ? 15 : 0;
-                    ctx.shadowColor = star.color;
-                    ctx.fill();
+        for (let i = 0; i < particleCount; i++) {
+            // Generate structured, long mathematical cosmic particle tunnel
+            const x = (Math.random() - 0.5) * 800;
+            const y = (Math.random() - 0.5) * 800;
+            const z = (Math.random() - 0.5) * 1600;
+
+            positions[i * 3] = x;
+            positions[i * 3 + 1] = y;
+            positions[i * 3 + 2] = z;
+
+            // Generate premium linear interpolation color gradient maps along space depth matrix (Z axis)
+            const mixedColor = color1.clone().lerp(color2, (z + 800) / 1600);
+            colors[i * 3] = mixedColor.r;
+            colors[i * 3 + 1] = mixedColor.g;
+            colors[i * 3 + 2] = mixedColor.b;
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+        // Create glowing high-tech custom round particle map textures directly inside Canvas
+        function createParticleTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 16;
+            canvas.height = 16;
+            const ctx = canvas.getContext('2d');
+            const gradient = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
+            gradient.addColorStop(0, 'rgba(255,255,255,1)');
+            gradient.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 16, 16);
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        const material = new THREE.PointsMaterial({
+            size: 2.2,
+            map: createParticleTexture(),
+            vertexColors: true,
+            transparent: true,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false
+        });
+
+        const particleSystem = new THREE.Points(geometry, material);
+        scene.add(particleSystem);
+
+        // --- MATH DISPLACEMENT & INTERACTION STATE LOGS ---
+        let scrollPercent = 0;
+        let targetCameraZ = 300;
+        let currentCameraZ = 300;
+        let targetRotationY = 0;
+        let currentRotationY = 0;
+
+        window.addEventListener('scroll', () => {
+            // Calculate total absolute scrolling footprint metrics
+            const h = document.documentElement, 
+                  b = document.body,
+                  st = 'scrollTop',
+                  sh = 'scrollHeight';
+            scrollPercent = (h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight);
+            
+            // Fly deep through the particle cloud based on scroll depth
+            targetCameraZ = 300 - (scrollPercent * 1000);
+            targetRotationY = scrollPercent * Math.PI * 0.5;
+
+            // Trigger structural UI reveal events natively
+            const panel = document.getElementById('trigger-panel');
+            if(scrollPercent > 0.25) {
+                panel.classList.add('visible');
+            } else {
+                panel.classList.remove('visible');
+            }
+        });
+
+        // Viewport window resizing update matrices configuration hook
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- MAIN REAL-TIME WEBGL RENDERING LOOPS ---
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const elapsedTime = clock.getElapsedTime();
+
+            // Smooth out movement tracking calculations dynamically (Lerping)
+            currentCameraZ += (targetCameraZ - currentCameraZ) * 0.05;
+            currentRotationY += (targetRotationY - currentRotationY) * 0.05;
+
+            camera.position.z = currentCameraZ;
+            
+            // Inject continuous baseline orbit shifts alongside scroll rotation matrices
+            particleSystem.rotation.z = elapsedTime * 0.03;
+            particleSystem.rotation.y = currentRotationY + (mouseX * 0.0003);
+            particleSystem.rotation.x = mouseY * 0.0003;
+
+            // Generate algorithmic waves (Sine distortion) on the entire particle coordinates array
+            const positionAttribute = geometry.attributes.position;
+            for (let i = 0; i < particleCount; i++) {
+                if (i % 7 === 0) { // Displace every 7th particle array map node for speed optimization
+                    const zCoord = positionAttribute.getZ(i);
+                    // Mutate coordinate structures fluidly over delta time lines
+                    positionAttribute.setY(i, positionAttribute.getY(i) + Math.sin(elapsedTime + zCoord * 0.01) * 0.15);
                 }
             }
+            positionAttribute.needsUpdate = true;
 
-            requestAnimationFrame(animateSpace);
+            renderer.render(scene, camera);
         }
 
-        // --- SCROLL-DRIVEN INTERACTIVE KINETICS ---
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.scrollY;
-            const delta = Math.abs(currentScroll - lastScrollY);
-            
-            // Map scroll intensity directly into physical star velocity
-            targetSpeed = Math.min(baseSpeed + delta * 0.8, 35); 
-            
-            // Subtle interactive parallax adjustments mapping nebulae positions to depth matrix
-            document.getElementById('nebula-1').style.transform = `translateY(${currentScroll * 0.2}px) scale(${1 + currentScroll*0.0002})`;
-            document.getElementById('nebula-2').style.transform = `translateY(${currentScroll * -0.15}px)`;
-            document.getElementById('nebula-3').style.transform = `translateX(${currentScroll * 0.05}px) translateY(${currentScroll * 0.1}px)`;
-
-            lastScrollY = currentScroll;
-        });
-
-        // --- INTERSECTION OBSERVER FOR UI CARDS REVEAL ---
-        const observerOptions = { threshold: 0.15 };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // Ignition
-        animateSpace();
+        // Initialize WebGL Application Execution
+        animate();
     </script>
 </body>
 </html>
